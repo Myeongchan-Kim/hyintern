@@ -1,12 +1,15 @@
 # hello_web.py
-from flask import Flask, request, url_for, render_template
+from flask import Flask, request, session, g, redirect, \
+	abort, flash, url_for, render_template
+import sqlite3
+
 app = Flask(__name__)
 
-@app.route('/')
+@app.route('/hello_world')
 def hello_world():
 	return 'Hello_world!'
 
-@app.route('/login', methods= ['POST', 'GET'])
+@app.route('/login_test', methods= ['POST', 'GET'])
 def login():
 	try:
 		if request.method == "POST":
@@ -16,8 +19,8 @@ def login():
 
 		else :
 			return render_template('login.html')
-	except KeyError, err :
-		print 'err -> : ' , err
+	except (KeyError, err ):
+		print('err -> : ' , err)
 		return 'wrong request'
 
 if __name__ == "__main__" :

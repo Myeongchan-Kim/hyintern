@@ -1,0 +1,76 @@
+<!--layout.html-->
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>무제 문서</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css" />
+	<script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
+	<script src="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
+	<link rel="apple-touch-icon" href="images/symbol_02_114px.jpg" />
+	<!--첫화면 필요없어서 주석처리
+	<link rel="apple-touch-startup-image" href="">
+	-->
+	<meta name="apple-mobile-web-app-capable" content="yes" />
+	<meta name="apple-moblie-web-app-status-bat-style" content="black" >
+	<style>
+	a{
+		text-decoration: none;
+	}
+	#header_left_icon{
+		position:fixed;
+		top:-5px;
+		left:2px;
+	}
+	#header_right_icon{
+		position:absolute;
+		top:0px;
+		right:5px;
+	}
+	a[data-iconpos=notext]{
+		height: 33px;
+		width:33px;
+		border-radius: 20px;
+	}
+
+	#header_right_icon a{
+		height: 11px;
+	}
+	</style>
+</head>
+<body>
+<div data-role="page" >
+	<div id="nav_sidebar">
+	{% block nav_sidebar %}{% endblock %}
+	</div>
+	<div id="header" data-role="header">
+		<div id="header_left_icon">
+		<a id="login_button" class="notext" data-role="button" data-icon="bars" data-iconpos="notext">MENU</a>
+		<a href="javascript:history.go(-1)" id="back_button" class="notext" data-role="button" data-icon="arrow-l" data-iconpos="notext">BACK</a>
+		</div>
+    	<h1 id="main_title"><a href="/">HY인턴꿀</a></h1>
+    	<div id="header_right_icon">
+		  	{% if not session.logged_in %}
+		    <a id="login_button" href="{{ url_for('login') }}" data-role="button" data-inline="true" data-mini="true" >LOGIN</a>
+		  	{% else %}
+		    <a id="logout_button" href="{{ url_for('logout') }}" data-role="button"  data-inline="true" data-mini="true" >LOGOUT</a>
+		  	{% endif %}
+	  	</div>
+    </div>
+    <div data-role="content">
+		{% for message in get_flashed_messages() %}
+	    <div class="flash_message">{{ message }}</div>
+		{% endfor %}
+	
+    	<div class="main_contents">
+		  {% block body %}{% endblock %}
+		</div>
+    </div>
+    <div data-role="footer">
+    	<h2>Copyright 2015 Paul Kim kmc5500@naver.com</h2>
+    </div>
+</div>
+
+</body>
+</html>
