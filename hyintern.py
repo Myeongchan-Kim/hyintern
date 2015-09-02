@@ -41,28 +41,37 @@ def teardown_request(exception):
 
 @app.route('/')
 def show_phone_num_list():
-	cur = g.db.execute('select title, phone from phone_num_list order by id desc')
-	phone_num_list = [dict(title=row[0], text=row[1]) for row in cur.fetchall()]
+	cur = g.db.execute('select title, phone_num from phone_num_list order by id desc')
+	phone_num_list = [dict(title=row[0], phone_num=row[1]) for row in cur.fetchall()]
 	return render_template('show_phone_num_list.html', list=phone_num_list)
 
-'''
-@app.route('/input_page', methods= ['GET'])
-def input_page():
-	if not session.get('logged_in'):
-        abort(401)
-
+@app.route('/edit', methods=['GET'])
+def edit_mode():
+    cur = g.db.execute('select id, title, phone_num from phone_num_list order by id desc')
+    phone_num_list = [dict(id=row[0], title=row[1], phone_num=row[2]) for row in cur.fetchall()]
+    return render_template('edit_mode.html', list=phone_num_list )
 
 @app.route('/add', methods=['POST'])
-def add_entry():
+def add_phone_num():
     if not session.get('logged_in'):
         abort(401)
-    g.db.execute('insert into phone_num_list (title, phone) values (?, ?)',
-                 [request.form['title'], request.form['phone']])
+    g.db.execute('insert into phone_num_list (title, phone_num) values (?, ?)',
+                 [request.form['title'], request.form['phone_num']])
     g.db.commit()
     flash('New phone number was successfully posted')
-    return redirect(url_for('phone_num_list'))
+    return redirect(url_for('show_phone_num_list'))
 
-'''
+@app.route('/delete/<id>', methods=['DELETE'])
+def delete(id=None):
+    if not session.get('logged_in'):
+        abort(401)
+    query = "delete from phone_num_list where id= '%s'" % request.form['id'] 
+    print("query : ",query)
+    g.db.execute(query)
+    g.db.commit()
+    flash(id+'has deleted')
+    return redirect(url_for('edit_mode'), code='303')
+
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     error = None
@@ -87,4 +96,4 @@ def logout():
 
 if __name__ == '__main__':
 	app.DEBUG = True;
-	app.run()
+	app.run(port=80)

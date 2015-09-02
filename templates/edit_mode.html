@@ -1,0 +1,30 @@
+{% extends "layout.html" %}
+<!--edit_mode.html-->
+{% block body %}
+<section id="new_phone_num_section">
+	<form id="new_phone_num_form" name="addform" action="{{ url_for('add_phone_num') }}" method="POST">
+	<div>
+		<span>가게이름 : </span>
+		<input type="text" name="title">
+	</div>
+	<div>
+		<span>전화번호 </span>
+		<input type="tel" name="phone_num">
+		<button>제출</button>
+	</div>
+	</form>
+</section>
+  <ul class=phone_num_list>
+  {% for row in list %}
+    <li>
+	    <article>
+	    <form id="delform" name="delform" method='DELETE' action ="{{ url_for('delete', id=row.id) }}">
+	    	<span>{{ row.title }}</span><span>{{ row.phone_num|safe }}</span><button form="delform" name = 'id' id="{{ row.title }}_{{ row.id}}" class="delete_button" value='{{ row.id }}'>삭제</button>
+	    </form>
+	    </article>
+    </li>
+  {% else %}
+    <li><em>아직 아무 번호가 없습니다.</em></li>
+  {% endfor %}
+  </ul>
+{% endblock %}

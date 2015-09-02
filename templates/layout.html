@@ -54,7 +54,9 @@
 		  	{% if not session.logged_in %}
 		    <a id="login_button" href="{{ url_for('login') }}" data-role="button" data-inline="true" data-mini="true" >LOGIN</a>
 		  	{% else %}
+		    <a id="move_to_editPage_button" href="{{ url_for('edit_mode') }}" data-role="button"  data-inline="true" data-mini="true" >EDIT</a>
 		    <a id="logout_button" href="{{ url_for('logout') }}" data-role="button"  data-inline="true" data-mini="true" >LOGOUT</a>
+		    
 		  	{% endif %}
 	  	</div>
     </div>
@@ -62,7 +64,6 @@
 		{% for message in get_flashed_messages() %}
 	    <div class="flash_message">{{ message }}</div>
 		{% endfor %}
-	
     	<div class="main_contents">
 		  {% block body %}{% endblock %}
 		</div>
@@ -71,6 +72,7 @@
     	<h2>Copyright 2015 Paul Kim kmc5500@naver.com</h2>
     </div>
 </div>
-
+<script>
+</script>
 </body>
 </html>

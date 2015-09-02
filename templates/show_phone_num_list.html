@@ -3,9 +3,12 @@
 {% block body %}
   <ul class=phone_num_list>
   {% for row in list %}
-    <li><h2>{{ row.title }}</h2>{{ row.text|safe }}
+    <li>
+    <h2>{{ row.title }}</h2>
+    <span>{{ row.phone_num|safe }}</span>
+    </li>
   {% else %}
-    <li><em>아직 아무 번호가 없습니다.</em>
+    <li><em>아직 아무 번호가 없습니다.</em></li>
   {% endfor %}
   </ul>
 {% endblock %}
