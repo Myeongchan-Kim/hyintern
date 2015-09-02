@@ -95,5 +95,4 @@ def logout():
     return redirect(url_for('show_phone_num_list'))
 
 if __name__ == '__main__':
-	app.DEBUG = True;
 	app.run(port=80)
