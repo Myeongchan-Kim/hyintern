@@ -3,7 +3,7 @@
 <html>
 <head>
 	<meta charset="utf-8">
-	<title>무제 문서</title>
+	<title>HY 인턴꿀</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css" />
 	<script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
@@ -15,6 +15,7 @@
 	<meta name="apple-mobile-web-app-capable" content="yes" />
 	<meta name="apple-moblie-web-app-status-bat-style" content="black" >
 	<style>
+
 	a{
 		text-decoration: none;
 	}
@@ -37,6 +38,27 @@
 	#header_right_icon a{
 		height: 11px;
 	}
+
+	div.round_button{
+		position :fixed;
+		bottom:20px;
+		right:20px;
+		width:50px;
+		height: 50px;
+		border-radius: 50px;
+		background: rgb( 50, 200, 50);
+		box-shadow: 2px 1px 3px #AAA;
+	}
+	div.round_button p{
+		color: #FFF;
+		position :relative;
+		width:50px;
+		height: 50px;
+		line-height: 50px;
+		margin:0 auto;
+		vertical-align: middle;
+		text-align: center;
+	}
 	</style>
 </head>
 <body>
@@ -49,7 +71,7 @@
 		<a id="login_button" class="notext" data-role="button" data-icon="bars" data-iconpos="notext">MENU</a>
 		<a href="javascript:history.go(-1)" id="back_button" class="notext" data-role="button" data-icon="arrow-l" data-iconpos="notext">BACK</a>
 		</div>
-    	<h1 id="main_title"><a href="/">HY인턴꿀</a></h1>
+    	<h1 id="main_title"><a href="/">HY인턴꿀-{{ location_str }}</a></h1>
     	<div id="header_right_icon">
 		  	{% if not session.logged_in %}
 		    <a id="login_button" href="{{ url_for('login') }}" data-role="button" data-inline="true" data-mini="true" >LOGIN</a>
