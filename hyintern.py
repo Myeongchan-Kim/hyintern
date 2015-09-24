@@ -29,9 +29,9 @@ app.config.from_object(__name__)
 
 # set location by cookie
 if(hasattr(request ,'cookie')):
-    location = request.cookie.get('location')
+    location_cookie = request.cookie.get('location')
 else :
-    location = 'seoul'
+    location_cookie = 'guri'
 
 def connect_db():
 	return sqlite3.connect(app.config['DATABASE'])
@@ -53,15 +53,16 @@ def teardown_request(exception):
 
 @app.route('/')
 def index_page():
-    return redirect(url_for('show_phone_num_list', location=location))
+    return redirect(url_for('show_phone_num_list', location=location_cookie))
 
-@app.route('/show/<location>')
-def show_phone_num_list(location=location):
+
+@app.route('/show/<location>', methods=['GET'])
+def show_phone_num_list(location = location_cookie):
     query = "select title, phone_num from phone_num_list where location='%s' order by id desc" % location
     cur = g.db.execute(query)
     
     phone_num_list = [dict(title=row[0], phone_num=row[1]) for row in cur.fetchall()]
-    resp = make_response(render_template('show_phone_num_list.html', list=phone_num_list, location_str=LOCATION[location]))
+    resp = make_response(render_template('show_phone_num_list.html', list=phone_num_list, location_str=location))
     resp.set_cookie('location', location)
     print(location)
     return resp
@@ -74,6 +75,7 @@ def edit_mode():
     phone_num_list = [dict(id=row[0], title=row[1], phone_num=row[2], location=row[3]) for row in cur.fetchall()]
     return render_template('edit_mode.html', list=phone_num_list )
 
+
 @app.route('/add', methods=['POST'])
 def add_phone_num():
     if not session.get('logged_in'):
@@ -82,7 +84,7 @@ def add_phone_num():
                  [request.form['title'], request.form['phone_num'] , request.form['location']])
     g.db.commit()
     flash('New phone number was successfully posted')
-    return redirect(url_for('show_phone_num_list'))
+    return redirect(url_for('index_page'))
 
 @app.route('/delete/<id>', methods=['DELETE'])
 def delete(id=None):
@@ -108,10 +110,11 @@ def login():
         else:
             session['logged_in'] = True
             flash('You were logged in')
-            return redirect(url_for('show_phone_num_list'))
+            return redirect(url_for('show_phone_num_list', location=location_cookie))
     if(('logged_in' in session) and (session['logged_in'] == True)) :
         return redirect(url_for('show_phone_num_list'))
     return render_template('login.html', error=error)
+
 
 @app.route('/logout')
 def logout():
