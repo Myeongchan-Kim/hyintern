@@ -22,16 +22,12 @@ SECRET_KEY = 'hanyang'
 USERNAME = 'admin'
 PASSWORD = 'default'
 LOCATION = {'seoul':'서울', 'guri':'구리', 'chang':'창원', 'jeju':'제주'}
+DEFULAT_LOCATION = 'seoul'
+location_cookie = DEFULAT_LOCATION
 
 # create our little app.
 app = Flask(__name__)
 app.config.from_object(__name__)
-
-# set location by cookie
-if(hasattr(request ,'cookie')):
-    location_cookie = request.cookie.get('location')
-else :
-    location_cookie = 'guri'
 
 def connect_db():
 	return sqlite3.connect(app.config['DATABASE'])
@@ -45,6 +41,7 @@ def init_db():
 @app.before_request
 def before_request():
 	g.db = connect_db()
+    
 
 @app.teardown_request
 def teardown_request(exception):
@@ -53,11 +50,14 @@ def teardown_request(exception):
 
 @app.route('/')
 def index_page():
+    # set location by cookie
+    if(hasattr(request, "cookies")):
+        location_cookie = request.cookies.get('location')
     return redirect(url_for('show_phone_num_list', location=location_cookie))
 
 
 @app.route('/show/<location>', methods=['GET'])
-def show_phone_num_list(location = location_cookie):
+def show_phone_num_list(location = DEFULAT_LOCATION):
     query = "select title, phone_num from phone_num_list where location='%s' order by id desc" % location
     cur = g.db.execute(query)
     
@@ -98,7 +98,6 @@ def delete(id=None):
     g.db.commit()
     flash(id+'has deleted')
     return redirect(url_for('edit_mode'), code='303')
-
 
 
 @app.route('/login', methods=['GET', 'POST'])
