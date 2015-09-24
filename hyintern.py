@@ -71,6 +71,8 @@ def show_phone_num_list(location = location_cookie):
 
 @app.route('/edit', methods=['GET'])
 def edit_mode():
+    if not session.get('logged_in'):
+        abort(401)
     cur = g.db.execute('select id, title, phone_num, location from phone_num_list order by id desc')
     phone_num_list = [dict(id=row[0], title=row[1], phone_num=row[2], location=row[3]) for row in cur.fetchall()]
     return render_template('edit_mode.html', list=phone_num_list )
