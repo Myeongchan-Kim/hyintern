@@ -53,6 +53,8 @@ def index_page():
     # set location by cookie
     if(hasattr(request, "cookies")):
         location_cookie = request.cookies.get('location')
+    else :
+        location_cookie = DEFULAT_LOCATION
     return redirect(url_for('show_phone_num_list', location=location_cookie))
 
 
