@@ -84,7 +84,7 @@
     	<h1 id="main_title"><a href="/" data-ajax="false">HY인턴꿀-{{ location_str }}</a></h1>
     	<div id="header_right_icon">
 		  	{% if not session.logged_in %}
-		    <a id="login_button" href="{{ url_for('login') }}" data-role="button" data-inline="true" data-mini="true" >LOGIN</a>
+		    <a id="login_button" href="{{ url_for('login') }}" data-role="button" data-inline="true" data-mini="true" data-ajax="false">LOGIN</a>
 		  	{% else %}
 		    <a id="move_to_editPage_button" href="{{ url_for('edit_mode') }}" data-role="button"  data-inline="true" data-mini="true" >EDIT</a>
 		    <a id="logout_button" href="{{ url_for('logout') }}" data-role="button"  data-inline="true" data-mini="true" >LOGOUT</a>
@@ -122,7 +122,6 @@
 </div><!--notyet끝-->
 <script>
 function showLocationMenu(event){
-	console.log('{{location_other}}');
 	console.log(event.target.closest("div").classList);
 	if(event.target.closest("div").classList.contains("now_button")){
 		var second_Button = document.querySelector(".round_button:last-child");
