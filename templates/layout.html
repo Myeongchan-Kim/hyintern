@@ -41,13 +41,21 @@
 
 	div.round_button{
 		position :fixed;
+		left:20px;
 		bottom:20px;
-		right:20px;
 		width:50px;
 		height: 50px;
 		border-radius: 50px;
 		background: rgb( 50, 200, 50);
 		box-shadow: 2px 1px 3px #AAA;
+		cursor: pointer;
+	}
+	div.second_round_button{
+		bottom:80px;
+		transition:bottom 1s;
+	}
+	div.now_button{
+		z-index: 10;
 	}
 	div.round_button p{
 		color: #FFF;
@@ -72,7 +80,7 @@
 		<!--<a id="login_button" class="notext" data-role="button" data-icon="bars" data-iconpos="notext">MENU</a>-->
 		<a href="javascript:history.back()" id="back_button" class="notext" data-role="button" data-icon="arrow-l" data-iconpos="notext">BACK</a>
 		</div>
-    	<h1 id="main_title"><a href="/">HY인턴꿀-{{ location_str }}</a></h1>
+    	<h1 id="main_title"><a href="/" data-ajax="false">HY인턴꿀-{{ location_str }}</a></h1>
     	<div id="header_right_icon">
 		  	{% if not session.logged_in %}
 		    <a id="login_button" href="{{ url_for('login') }}" data-role="button" data-inline="true" data-mini="true" >LOGIN</a>
@@ -94,6 +102,14 @@
     <div data-role="footer">
     	<h2>Copyright 2015 Paul Kim kmc5500@naver.com</h2>
     </div>
+	<div class='round_button now_button'>
+		<p> {{ location_str }}</p>
+	</div>
+	<div class='round_button'>
+		<p>
+		<a href="/show/{{location_other}}" data-ajax="false">{{location_other}}</a>
+		</p>
+	</div>
 </div>
 <div data-role="page" id="notyet">
 <div data-role="header">
@@ -104,6 +120,18 @@
     </div>
 </div><!--notyet끝-->
 <script>
+function showLocationMenu(event){
+	console.log('{{location_other}}');
+	console.log(event.target.closest("div").classList);
+	if(event.target.closest("div").classList.contains("now_button")){
+		var second_Button = document.querySelector(".round_button:last-child");
+		console.log(second_Button.classList);
+		second_Button.classList.toggle("second_round_button");
+	}
+}
+
+document.addEventListener('click', showLocationMenu);
+
 </script>
 </body>
 </html>

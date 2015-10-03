@@ -21,7 +21,8 @@ DEBUG = True
 SECRET_KEY = 'hanyang'
 USERNAME = 'admin'
 PASSWORD = 'default'
-LOCATION = {'seoul':'서울', 'guri':'구리', 'chang':'창원', 'jeju':'제주'}
+LOCATION = {'seoul':'서울', 'guri':'구리'}
+#'chang':'창원', 'jeju':'제주'}
 DEFULAT_LOCATION = 'seoul'
 location_cookie = DEFULAT_LOCATION
 
@@ -33,10 +34,13 @@ def connect_db():
 	return sqlite3.connect(app.config['DATABASE'])
 
 def init_db():
-	with closing(connect_db()) as db:
-		with app.open_resource('schema.sql') as f:
-			db.cursor().executescript(f.read())
-		db.commit()
+    with closing(connect_db()) as db:
+        with app.open_resource('schema.sql') as f:
+            try:
+                db.cursor().executescript(f.read())
+            except sqlite3.OperationalError, msg:
+                print msg
+        db.commit()
 
 @app.before_request
 def before_request():
@@ -50,6 +54,7 @@ def teardown_request(exception):
 
 @app.route('/')
 def index_page():
+    location_cookie = DEFULAT_LOCATION
     # set location by cookie
     if(hasattr(request, "cookies")):
         location_cookie = request.cookies.get('location')
@@ -62,11 +67,15 @@ def index_page():
 def show_phone_num_list(location = DEFULAT_LOCATION):
     query = "select title, phone_num from phone_num_list where location='%s' order by id desc" % location
     cur = g.db.execute(query)
-    
     phone_num_list = [dict(title=row[0], phone_num=row[1]) for row in cur.fetchall()]
-    resp = make_response(render_template('show_phone_num_list.html', list=phone_num_list, location_str=location))
+    location2 = 'a'
+    if(location == 'guri'):
+        location2 = 'seoul'
+    else:
+        location2 = 'guri'
+    resp = make_response(render_template('show_phone_num_list.html', list=phone_num_list, location_str=location , location_other=location2))
     resp.set_cookie('location', location)
-    print(location)
+    print('location='+location+' location2='+location2)
     return resp
 
 
@@ -126,5 +135,5 @@ def logout():
     return redirect(url_for('show_phone_num_list', location=location_cookie))
     
 if __name__ == '__main__':
-    app.DEBUG = "FALSE"
+    app.debug = False
     app.run(host='0.0.0.0', port=80)
