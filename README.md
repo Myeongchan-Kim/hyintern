@@ -9,4 +9,6 @@ hyintern.py - 메인파일입니다.
 template/ - 템플릿 html 파일들입니다. 
 tmp/ - db 저장하는곳.
 
+venv/ - 가상환경 돌리기 위한 파일들 있는곳.
+
 example/ - 복붙! 용으로 이것저것 저장해놓은곳.
