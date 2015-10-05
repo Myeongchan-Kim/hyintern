@@ -52,11 +52,10 @@ def teardown_request(exception):
 	g.db.close()
 
 
-@app.route('/')
+@app.route('/', methods=['GET'])
 def index_page():
-    location_cookie = DEFULAT_LOCATION
     # set location by cookie
-    if(hasattr(request, "cookies")):
+    if(request.cookies.get('location')):
         location_cookie = request.cookies.get('location')
     else :
         location_cookie = DEFULAT_LOCATION
