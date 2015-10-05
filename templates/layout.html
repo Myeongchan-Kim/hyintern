@@ -74,7 +74,7 @@
 	</style>
 </head>
 <body>
-<div data-role="page" >
+<div data-role="page" class="main_container">
 	<div id="nav_sidebar">
 	{% block nav_sidebar %}{% endblock %}
 	</div>
@@ -124,12 +124,22 @@
 </div><!--notyet끝-->
 <script>
 function showLocationMenu(event){
-	console.log(event.target.closest("div").classList);
-	if(event.target.closest("div").classList.contains("now_button")){
-		var second_Button = document.querySelector(".round_button:last-child");
-		console.log(second_Button.classList);
-		second_Button.classList.toggle("second_round_button");
+	var selectedElement = event.target;
+	while( !selectedElement.classList.contains("main_container") 
+			&& !selectedElement.tagName !== "BODY"){
+		if(selectedElement.classList.contains("now_button")){
+			var second_Button = document.querySelector(".round_button:last-child");
+			console.log(second_Button.classList);
+			second_Button.classList.toggle("second_round_button");
+		}
+		selectedElement = selectedElement.parentElement;
 	}
+	// console.log(event.target.closest("div").classList);
+	// if(event.target.closest("div").classList.contains("now_button")){
+	// 	var second_Button = document.querySelector(".round_button:last-child");
+	// 	console.log(second_Button.classList);
+	// 	second_Button.classList.toggle("second_round_button");
+	// }
 }
 
 document.addEventListener('click', showLocationMenu);
